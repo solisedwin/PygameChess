@@ -1,6 +1,7 @@
 
 import pygame 
 from .piece import ChessPiece
+from .piece import EmptySpace
 from pygame.sprite import Group as SpriteGroup
 from pygame.time import Clock
 import os
@@ -23,7 +24,6 @@ class ChessSetup(object):
 		self.pawns = ['pawn'] * 8	
 		
 
-
 		"""
 		Two dimensional array, e.g.: [0][0] = Top left, rook 
 		Each coordinate/spot , will represent if a piece class is present on it
@@ -37,12 +37,18 @@ class ChessSetup(object):
 			for col in range(8):
 				if row == 0:
 					board[row][col] = black_pieces[col]
-				if row == 1:
+					black_pieces[col].board_position = [row , col] 
+				elif row == 1:
 					board[row][col] = black_pieces[8 + col]
-				if row == 6:
+					black_pieces[8 + col ].board_position = [row , col]
+				elif row == 6:
 					board[row][col] = white_pieces[col]
-				if row == 7:
+					white_pieces[col].board_position = [row , col]
+				elif row == 7:
 					board[row][col] = white_pieces[8 + col]
+					white_pieces[8 + col].board_position = [row , col]
+				else:
+					board[row][col] = EmptySpace('Empty Space', [row, col])
 		return board
 
 
@@ -66,7 +72,6 @@ class ChessSetup(object):
 
 		"""
 		Save pieces and their SPECIFIC order, for when we added the objects to our chess_board
-		
 		BR, BK, BB, BKING, BQ, BB , BK , BR 
 		"""
 		black_piece_objects = []
@@ -117,7 +122,6 @@ class ChessSetup(object):
 				black_pawn_sprite = ChessPiece(name = 'pawn' , color = 'black', position = black_pawn_position , is_taken = False, image = black_pawn_image)				
 				black_piece_objects.append(black_pawn_sprite)
 
-
 				self.all_sprites.add(black_pawn_sprite)
 				self.all_sprites.add(white_pawn_sprite)
 
@@ -132,12 +136,14 @@ class ChessSetup(object):
 
 	
 	def set_window(self):
+
 		window = pygame.display.set_mode([500,500])
 		window.fill((106, 168, 176))
 		pygame.display.set_caption("Online Chess")	
 
-		board_image = os.path.join(os.path.dirname(__file__), '../images/board.png')
-		chess_board_image = pygame.image.load(board_image).convert_alpha()
+		board_image_path = os.path.join(os.path.dirname(__file__), '../images/board.png')
+		chess_board_image = pygame.image.load(board_image_path).convert_alpha()
+		chess_board_image = pygame.transform.scale(chess_board_image , (180,180))
 
 		#The topleft of the Surface will be placed at the position.
 		window.blit(chess_board_image , (90,150) )
