@@ -8,7 +8,6 @@ image_folder = os.path.join(current_folder, "../images")
 
 class ChessPiece(pygame.sprite.Sprite):
 
-
 	def __init__(self, name = None, color = None, position = None, is_taken = False, 
 		image = None , board_position = None):
 
@@ -30,7 +29,6 @@ class ChessPiece(pygame.sprite.Sprite):
 
 		self.board_position = board_position
 
-
 	"""
 	Draw green circle once player clicks on piece, 
 	when about to move piece
@@ -40,8 +38,21 @@ class ChessPiece(pygame.sprite.Sprite):
 		pygame.draw.rect(screen, RED, self.rect, 2)
 
 
+class EmptySpace(pygame.sprite.Sprite):
 
-class EmptySpace(object):
-	def __init__(self, name = 'Empty Space', board_position = None):
+	def __init__ (self, name = 'Empty', surface_pos = None  , board_position = None):
+		super().__init__() 
+
+		self.image = pygame.Surface( (100 , 100) , pygame.SRCALPHA, 32).convert_alpha()
+		
+		#Rect((left, top), (width, height)) -> Rect
+		self.rect  = pygame.Rect(surface_pos[0] , surface_pos[1] , 21, 19)
+		self.name = name
 		self.board_position = board_position
+
+
+	def draw_green_border(self, screen):
+		GREEN = (0, 255, 0)
+		pygame.draw.rect(screen, GREEN, self.rect, 2)
+
 

@@ -13,6 +13,11 @@ class ChessSetup(object):
 		self.screen_width = 500
 		self.screen_height = 500
 
+		self.chess_board_height = 180
+		self.chess_board_width = 180
+
+
+
 		self.all_sprites = SpriteGroup()
 
 		self.image_extension = '.png'
@@ -33,22 +38,37 @@ class ChessSetup(object):
 
 	def fill_chess_board(self, board , white_pieces, black_pieces):
 
+		empty_space_inital_x = 96
+
+		empty_space_x = 96  
+		empty_space_y =  127
+
 		for row in range(8):			
+
+			empty_space_y += 23	
+			#Go back to the start of a row
+			empty_space_x = empty_space_inital_x
+
 			for col in range(8):
 				if row == 0:
-					board[row][col] = black_pieces[col]
 					black_pieces[col].board_position = [row , col] 
+					board[row][col] = black_pieces[col]
 				elif row == 1:
-					board[row][col] = black_pieces[8 + col]
 					black_pieces[8 + col ].board_position = [row , col]
+					board[row][col] = black_pieces[8 + col]
 				elif row == 6:
-					board[row][col] = white_pieces[col]
 					white_pieces[col].board_position = [row , col]
+					board[row][col] = white_pieces[col]
 				elif row == 7:
-					board[row][col] = white_pieces[8 + col]
 					white_pieces[8 + col].board_position = [row , col]
+					board[row][col] = white_pieces[8 + col]
 				else:
-					board[row][col] = EmptySpace('Empty Space', [row, col])
+					board[row][col] = EmptySpace('Empty', surface_pos =[empty_space_x,empty_space_y] ,  board_position = [row, col])
+					self.all_sprites.add(board[row][col])
+
+					#Move horizontal across board
+					empty_space_x += 21
+
 		return board
 
 
@@ -134,6 +154,10 @@ class ChessSetup(object):
 		return white_piece_objects , black_piece_objects
 
 
+		def get_chess_board_dimensinos(self):
+			return 
+
+
 	
 	def set_window(self):
 
@@ -145,6 +169,7 @@ class ChessSetup(object):
 		chess_board_image = pygame.image.load(board_image_path).convert_alpha()
 		chess_board_image = pygame.transform.scale(chess_board_image , (180,180))
 
+	
 		#The topleft of the Surface will be placed at the position.
 		window.blit(chess_board_image , (90,150) )
 		return window

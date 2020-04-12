@@ -22,14 +22,14 @@ pygame.draw.rect(hero_img_with_border, red, (0, 0, 47, 47), 2)
 
 
 class Hero(pygame.sprite.Sprite):
-
     def __init__(self, position):
         super().__init__()
         self.image = hero_img
         self.rect = self.image.get_rect(center=position)
         self.speed = 3
 
-    def draw(self, screen):
+
+        def draw(self, screen):
         # ---Solution 2---
         # Just draw the non-filled rect here.
         pygame.draw.rect(screen, red, self.rect, 2)
@@ -42,6 +42,7 @@ class Hero(pygame.sprite.Sprite):
         self.rect.y -= self.speed
     def down(self):
         self.rect.y += self.speed
+
 
 
 screen = pygame.display.set_mode((640, 480))
@@ -73,7 +74,7 @@ while running:
 
     screen.fill(white)
     sprites_list.draw(screen)
-    
+
     # If you use solution 1, you don't need the draw method, since
     # sprites_list.draw blits the image already.
     hero.draw(screen)
