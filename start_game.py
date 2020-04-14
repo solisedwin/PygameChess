@@ -5,7 +5,7 @@ from pygame.time import Clock
 import sys
 import time
 from game_play.player import Player
-from chess_gui.piece import ChessPiece , EmptySpace
+from chess_gui.piece import ChessPiece, EmptySpace
 
 
 WHITE = (255, 255, 255)
@@ -40,7 +40,7 @@ class RunGame(object):
 					if chess_piece.rect.collidepoint(pos) and isinstance(chess_piece , ChessPiece ) and current_player.turn and current_player.piece_clicked is None:
 
 						#If chess piece was clicked , get only first item
-						chess_piece.draw_red_border(screen)
+						chess_piece.draw_red_border(screen)	
 
 						#Sprite Object that reprsents Chess Piece
 						current_player.piece_clicked =  chess_piece 
@@ -53,11 +53,15 @@ class RunGame(object):
 					#Second click to tell the player where to move the chess piece. Where its an empty space in this situation	
 					elif chess_piece.rect.collidepoint(pos) and isinstance(chess_piece , EmptySpace) and current_player.turn and current_player.piece_clicked is not None:
 						print('Clicked on empty space to move piece !!!!')
+						
+						clicked_board_destination = chess_piece
+						current_player.piece_clicked.valid_moves(chess_board =  chess_board,  destination_space = clicked_board_destination)
 					else:
 						pass
 
 					
 	def main(self):
+		
 		chess = ChessSetup()
 		screen = chess.set_window()
 		
