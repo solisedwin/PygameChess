@@ -45,14 +45,22 @@ class Pawn(ChessPiece):
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_xpos , destination_ypos = destination_space.board_position[0] , destination_space.board_position[1]
 
+		print('Pawn xpos: ' + str(piece_xpos))
+		print('Pawn ypos: ' + str(piece_ypos))
+
+		print('Destination xpos: ' + str(destination_xpos))
+		print('Destination ypos: ' + str(destination_ypos))
+
 
 		#If its the first time we move a pawn, then we can move it once or twice. 
 		if self.moves == 0:
-			if piece_ypos + 1 == destination_xpos or piece_ypos + 2 == destination_ypos:
+			if piece_ypos + 1 == destination_ypos or piece_ypos + 2 == destination_ypos:
 				self.position = destination_space.rect
+				print('Valid pawn move')
 
 		elif self.destination_ypos == self.piece_ypos + 1:
 			self.position = destination_space.rect
+			print('Valid pawn move to move up one space')
 
 		elif self.piece_ypos == 7 and self.destination_ypos == 8:
 			print('*** Time to promote the pawn to a Queen ***')

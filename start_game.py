@@ -35,7 +35,6 @@ class RunGame(object):
 					if hasattr(chess_piece, 'draw_green_border'):
 						chess_piece.draw_green_border(screen)
 
-
 					#We check if we have clicked on a chess piece and its the right players turn and the save the information that the player hasnt choosen a piece yet 
 					if chess_piece.rect.collidepoint(pos) and isinstance(chess_piece , ChessPiece ) and current_player.turn and current_player.piece_clicked is None:
 

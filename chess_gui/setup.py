@@ -65,7 +65,6 @@ class ChessSetup(object):
 
 					#Move horizontal across board
 					empty_space_x += 21
-
 		return board
 
 
