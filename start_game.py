@@ -1,11 +1,11 @@
 
 import pygame
-from chess_gui.setup import ChessSetup
+from gui_setup.setup import ChessSetup
 from pygame.time import Clock
 import sys
 import time
 from game_play.player import Player
-from chess_gui.piece import ChessPiece, EmptySpace
+from game_play.game import GamePlay
 
 
 WHITE = (255, 255, 255)
@@ -17,7 +17,7 @@ class RunGame(object):
 		pygame.init()
 
 
-	def handle_events(self, sprites, screen, current_player , chess_board):
+	def handle_events(self, sprites, screen, game_play):
 		
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -30,47 +30,37 @@ class RunGame(object):
 				pos = pygame.mouse.get_pos()
 				completed_turn = False
 
-				for chess_piece in sprites:
+				for chess_piece_sprite in sprites:
 
 					if hasattr(chess_piece, 'draw_green_border'):
-						chess_piece.draw_green_border(screen)
+						chess_piece_sprite.draw_green_border(screen)
 
-					#We check if we have clicked on a chess piece and its the right players turn and the save the information that the player hasnt choosen a piece yet 
-					if chess_piece.rect.collidepoint(pos) and isinstance(chess_piece , ChessPiece ) and current_player.turn and current_player.piece_clicked is None:
+					clicked_board_piece = game_play.get_clicked_choosen_piece(screen, pos, chess_piece_sprite)
+					break
 
-						#If chess piece was clicked , get only first item
-						chess_piece.draw_red_border(screen)	
 
-						#Sprite Object that reprsents Chess Piece
-						current_player.piece_clicked =  chess_piece 
-						print('Clicked on piece: ' + str(chess_piece.name))	
+				if clicked_piece:
+					destination_xpos , destination_ypos = clicked_board_piece.board_position[0] , clicked_board_piece.board_position[1]
+					is_valid_move = current_player.piece_clicked.valid_moves(chess_board =  chess_board,  destination_piece =  clicked_board_piece)
+					
+					
 
-					#Second click to tell the player which piece to capture.
-					elif chess_piece.rect.collidepoint(pos) and isinstance(chess_piece , ChessPiece) and current_player.turn and current_player.piece_clicked is not None:
-						print('Clicked on 2nd piece to capture')
-							
-					#Second click to tell the player where to move the chess piece. Where its an empty space in this situation	
-					elif chess_piece.rect.collidepoint(pos) and isinstance(chess_piece , EmptySpace) and current_player.turn and current_player.piece_clicked is not None:
-						print('Clicked on empty space to move piece !!!!')
-						
-						clicked_board_destination = chess_piece
-						current_player.piece_clicked.valid_moves(chess_board =  chess_board,  destination_space = clicked_board_destination)
-					else:
-						pass
 
 					
 	def main(self):
 		
-		chess = ChessSetup()
-		screen = chess.set_window()
+		chess_settings = ChessSetup()
+		screen = chess_settings.set_window()
 		
 		empty_board = [[0 for x in range(8)] for _ in range(8)]
 
 		#Set up Chess Piece Sprite Objects by name, color, position, image..etc
-		white_pieces , black_pieces = chess.setup_pieces()
+		white_pieces , black_pieces = chess_settings.setup_pieces()
 		#Fill the chess board with pieces and empty spaces get a value of None
-		chess_board = chess.fill_chess_board(empty_board , white_pieces , black_pieces)
+		chess_board = chess_settings.fill_chess_board(empty_board , white_pieces , black_pieces)
 	
+		all_sprites = chess_settings.all_sprites
+
 		clock = Clock()
 
 		white_player = Player('Edwin', 'White', True, None , [], False)
@@ -79,10 +69,12 @@ class RunGame(object):
 		game_running = True
 		current_player = white_player
 
-		while game_running:
+		game_play_object = GamePlay(chess_board =  chess_board, player1 =  white_player , player2 = black_player, white_player)
 
+
+		while game_running:
 			clock.tick(30)
-			self.handle_events(chess.all_sprites, screen, current_player , chess_board)
+			self.handle_events(all_sprites, screen, game_play_object)
 			chess.all_sprites.draw(screen)
 
 			# *after* drawing everything

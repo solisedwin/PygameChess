@@ -54,11 +54,11 @@ class ChessSetup(object):
 					black_pieces[8 + col ].board_position = [row , col]
 					board[row][col] = black_pieces[8 + col]
 				elif row == 6:
-					white_pieces[col].board_position = [row , col]
-					board[row][col] = white_pieces[col]
-				elif row == 7:
 					white_pieces[8 + col].board_position = [row , col]
 					board[row][col] = white_pieces[8 + col]
+				elif row == 7:
+					white_pieces[col].board_position = [row , col]
+					board[row][col] = white_pieces[col]
 				else:
 					board[row][col] = EmptySpace('Empty', surface_pos =[empty_space_x,empty_space_y] ,  board_position = [row, col])
 					self.all_sprites.add(board[row][col])
