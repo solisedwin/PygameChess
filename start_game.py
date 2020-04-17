@@ -1,9 +1,7 @@
-
 import pygame
 from gui_setup.setup import ChessSetup
 from pygame.time import Clock
 import sys
-import time
 from game_play.player import Player
 from game_play.game import GamePlay
 
@@ -18,10 +16,10 @@ class RunGame(object):
 
 
 	def handle_events(self, sprites, screen, game_play):
-		
+	
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				game_running = False
+				game_running = False	
 				pygame.quit()	
 				sys.exit(1)
 			
@@ -32,21 +30,19 @@ class RunGame(object):
 
 				for chess_piece_sprite in sprites:
 
-					if hasattr(chess_piece, 'draw_green_border'):
-						chess_piece_sprite.draw_green_border(screen)
+					if game_play.get_clicked_choosen_piece(screen, pos, chess_piece_sprite) is not None:
 
-					clicked_board_piece = game_play.get_clicked_choosen_piece(screen, pos, chess_piece_sprite)
-					break
+						#First time clicking a piece
+						if game_play.current_player.piece_clicked is None:
+							game_play.current_player.piece_clicked = chess_piece_sprite
+							break
+
+						#Second time player clicked to tell the piece where to move 
+						else:
+
+							game_play.validate_piece_move(chess_piece_sprite)
 
 
-				if clicked_piece:
-					destination_xpos , destination_ypos = clicked_board_piece.board_position[0] , clicked_board_piece.board_position[1]
-					is_valid_move = current_player.piece_clicked.valid_moves(chess_board =  chess_board,  destination_piece =  clicked_board_piece)
-					
-					
-
-
-					
 	def main(self):
 		
 		chess_settings = ChessSetup()
@@ -69,13 +65,13 @@ class RunGame(object):
 		game_running = True
 		current_player = white_player
 
-		game_play_object = GamePlay(chess_board =  chess_board, player1 =  white_player , player2 = black_player, white_player)
+		game_play_object = GamePlay(chess_board =  chess_board, player1 =  white_player , player2 = black_player)
 
 
 		while game_running:
 			clock.tick(30)
 			self.handle_events(all_sprites, screen, game_play_object)
-			chess.all_sprites.draw(screen)
+			chess_settings.all_sprites.draw(screen)
 
 			# *after* drawing everything
 			pygame.display.flip()

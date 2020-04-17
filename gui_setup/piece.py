@@ -45,37 +45,24 @@ class Pawn(ChessPiece):
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]
 
-		is_valid_move = False
-
-
+	
 		#If its the first time we move a pawn, then we can move it once or twice. 
 		if self.moves == 0:
 			if piece_xpos - 1 == destination_xpos or piece_xpos - 2 == destination_xpos:
 				#self.position = destination_space.rect
 				self.board_position = [destination_xpos , destination_ypos]
 				self.moves += 1
-				print('Valid first pawn move')
-				is_valid_move = True
+				return True
 
 		elif piece_xpos - 1 == destination_xpos:
 			#self.position = destination_space.rect
 			self.board_position = [destination_xpos , destination_ypos]
-			print('Valid pawn move to move up one space')
-			is_valid_move = True
+			return True
 
 		elif piece_xpos == 1 and destination_xpos == 0:
-			print('*** Time to promote the pawn to a Queen ***')
-			is_valid_move = True
+			return True
 		else:
-			print('Not a valid move for the pawn !!!!')
 			return False
-
-
-		if is_valid_move:
-				
-
-
-
 
 
 class Rook(ChessPiece):
@@ -119,11 +106,8 @@ class Bishop(ChessPiece):
 	def valid_moves(self, chess_board , destination_piece):
 
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
-		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]
-		
+		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]		
 		board_size = len(chess_board)
-
-
 
 
 
@@ -141,27 +125,25 @@ class King(ChessPiece):
 			print('Valid Move for King. Moving one vertically or horizontally')  
 			return True
 		
-		#Moving the king in all directions diagonally
-
 		#Upper left
 		elif ( piece_xpos -1 == destination_xpos and piece_ypos - 1 == destination_ypos ):
 			print('Valid King move diagonally. Upper left')
-		  	return True
+			return True
 
 		 #Upper Right
 		elif ( piece_xpos + 1 == destination_xpos and piece_ypos - 1 == destination_ypos ):
 			print('Valid King move diagonally. Upper left')
-		  	return True
+			return True
 
 		#Lower left
 		elif ( piece_xpos - 1 == destination_xpos and piece_ypos - 1 == destination_ypos ):
 			print('Valid King move diagonally. Upper left')
-		  	return True
+			return True
 
 		 #Lower Right
 		elif ( piece_xpos + 1 == destination_xpos and piece_ypos + 1 == destination_ypos ):
 			print('Valid King move diagonally. Upper left')
-		  	return True
+			return True
 
 		else:
 			print('~~ Not a valid move for the king !!')
