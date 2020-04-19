@@ -15,7 +15,7 @@ class RunGame(object):
 		pygame.init()
 
 
-	def handle_events(self, sprites, screen, game_play):
+	def handle_events(self, sprites, screen, game_play, chess_board_image):
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -40,9 +40,12 @@ class RunGame(object):
 							
 							screen.fill( (106, 168, 176))
 
+							screen.blit(chess_board_image , (90,150) )
+
 							new_empty_space = game_play.move_piece(chess_piece_sprite)
 
 							#new_empty_space.draw_green_border(screen)
+
 							screen.blit(new_empty_space.image ,  new_empty_space.rect )
 
 						else:
@@ -73,12 +76,12 @@ class RunGame(object):
 
 
 		chess_board_image = chess_settings.get_main_board_image()
+		screen.blit(chess_board_image , (90,150) )
 
 		while True:
 
-			screen.blit(chess_board_image , (90,150) )
 			clock.tick(30)
-			self.handle_events(game_play_obj.chess_sprites, screen, game_play_obj)
+			self.handle_events(game_play_obj.chess_sprites, screen, game_play_obj , chess_board_image)
 
 			# *after* drawing everything
 			game_play_obj.chess_sprites.draw(screen)
