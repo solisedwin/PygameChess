@@ -81,7 +81,6 @@ class Rook(ChessPiece):
 			print('Valid move for Rook')
 		else:
 			print('Not a valid move for the Rook !')
-
 	
 
 
@@ -144,11 +143,9 @@ class King(ChessPiece):
 		elif ( piece_xpos + 1 == destination_xpos and piece_ypos + 1 == destination_ypos ):
 			print('Valid King move diagonally. Upper left')
 			return True
-
 		else:
 			print('~~ Not a valid move for the king !!')
 			return False
-
 
 
 
@@ -161,7 +158,7 @@ class Queen(ChessPiece):
 
 class EmptySpace(pygame.sprite.Sprite):
 
-	def __init__ (self, name = 'Empty', surface_pos = None  , board_position = None):
+	def __init__ (self, name = 'Empty', surface_pos = None , board_position = None):
 
 		super().__init__()
 		self.image = pygame.Surface( (100 , 100) , pygame.SRCALPHA, 32).convert_alpha()

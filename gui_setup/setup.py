@@ -68,7 +68,6 @@ class ChessSetup(object):
 		return board
 
 
-
 	def setup_pieces(self):
 		
 		img_black_pieces = [ 'black_' + (piece) + self.image_extension  for piece in self.pieces  ]
@@ -186,12 +185,15 @@ class ChessSetup(object):
 		window.fill((106, 168, 176))
 		pygame.display.set_caption("Online Chess")	
 
+		#The topleft of the Surface will be placed at the position.
+		#window.blit(chess_board_image , (90,150) )
+		return window
+
+
+	def get_main_board_image(self):
+		
 		board_image_path = os.path.join(os.path.dirname(__file__), '../images/board.png')
 		chess_board_image = pygame.image.load(board_image_path).convert_alpha()
 		chess_board_image = pygame.transform.scale(chess_board_image , (180,180))
+		return chess_board_image
 
-	
-		#The topleft of the Surface will be placed at the position.
-		window.blit(chess_board_image , (90,150) )
-		return window
-	

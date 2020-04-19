@@ -16,13 +16,12 @@ class RunGame(object):
 
 
 	def handle_events(self, sprites, screen, game_play):
-	
+
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				game_running = False	
-				pygame.quit()	
+				pygame.quit()
 				sys.exit(1)
-			
+
 			if event.type == pygame.MOUSEBUTTONUP:
 
 				pos = pygame.mouse.get_pos()
@@ -36,25 +35,32 @@ class RunGame(object):
 						if game_play.current_player.piece_clicked is None:
 							game_play.current_player.piece_clicked = chess_piece_sprite
 							break
+						#Second time player clicked to tell the piece where to move
+						elif game_play.validate_piece_move(chess_piece_sprite):
+							
+							screen.fill( (106, 168, 176))
 
-						#Second time player clicked to tell the piece where to move 
+							new_empty_space = game_play.move_piece(chess_piece_sprite)
+
+							#new_empty_space.draw_green_border(screen)
+							screen.blit(new_empty_space.image ,  new_empty_space.rect )
+
 						else:
-
-							game_play.validate_piece_move(chess_piece_sprite)
+							continue
 
 
 	def main(self):
-		
+
 		chess_settings = ChessSetup()
 		screen = chess_settings.set_window()
-		
+
 		empty_board = [[0 for x in range(8)] for _ in range(8)]
 
 		#Set up Chess Piece Sprite Objects by name, color, position, image..etc
 		white_pieces , black_pieces = chess_settings.setup_pieces()
 		#Fill the chess board with pieces and empty spaces get a value of None
 		chess_board = chess_settings.fill_chess_board(empty_board , white_pieces , black_pieces)
-	
+		
 		all_sprites = chess_settings.all_sprites
 
 		clock = Clock()
@@ -62,24 +68,27 @@ class RunGame(object):
 		white_player = Player('Edwin', 'White', True, None , [], False)
 		black_player = Player('Kayne', 'Black', False, None , [], False)
 
-		game_running = True
 		current_player = white_player
+		game_play_obj = GamePlay(chess_board = chess_board, chess_sprites = all_sprites, player1 =  white_player , player2 = black_player)
 
-		game_play_object = GamePlay(chess_board =  chess_board, player1 =  white_player , player2 = black_player)
 
+		chess_board_image = chess_settings.get_main_board_image()
 
-		while game_running:
+		while True:
+
+			screen.blit(chess_board_image , (90,150) )
 			clock.tick(30)
-			self.handle_events(all_sprites, screen, game_play_object)
-			chess_settings.all_sprites.draw(screen)
+			self.handle_events(game_play_obj.chess_sprites, screen, game_play_obj)
 
 			# *after* drawing everything
-			pygame.display.flip()
-
-		pygame.display.quit() 
-		
+			game_play_obj.chess_sprites.draw(screen)
+			pygame.display.update()
 
 
-if __name__ == '__main__':	
+		pygame.display.quit()
+
+
+
+if __name__ == '__main__':
 	play_game = RunGame()
-	play_game.main() 
+	play_game.main()
