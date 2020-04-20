@@ -77,4 +77,3 @@ class GamePlay(object):
 		self.chess_sprites.remove(destination_space)
 		self.chess_sprites.add(new_emptyspace)
 		return new_emptyspace
-

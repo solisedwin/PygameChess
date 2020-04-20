@@ -79,9 +79,10 @@ class Rook(ChessPiece):
 		# Moving about the column  or row.
 		if piece_ypos  == destination_ypos or piece_xpos == destination_xpos:
 			print('Valid move for Rook')
+			return True
 		else:
 			print('Not a valid move for the Rook !')
-	
+			return False
 
 
 class Knight(ChessPiece):
@@ -89,10 +90,41 @@ class Knight(ChessPiece):
 	def __init__(self , **kwargs):
 		super(Knight, self).__init__(**kwargs)
 		
-	def valid_moves(self, chess_board , destination_xpos , destination_ypos):
+	def valid_moves(self, chess_board , destination_piece):
+
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
+		destination_space = (destination_piece.board_position[0] , destination_piece.board_position[1])
 
+		row_direction = 2
+		col_direction = 1
 
+		swap_directions = False
+
+		direction_signs = [(-2,-1) , (1,-2) , (1,2) , (-1,2)]
+
+		for i in range(4):
+			
+			row_direction, col_direction = direction_signs[i][0], direction_signs[i][1]
+			
+			format_str1 = ("Position: {} , {} ").format(direction_signs[i][0]  , direction_signs[i][1])
+			format_str2 = ("Position: {} , {} ").format(direction_signs[i][1]  , direction_signs[i][0])
+
+			print(format_str1)
+			print(format_str2)
+			
+			if self.knight_possible_move_check((piece_xpos , piece_ypos), row_direction , col_direction, destination_space):
+				return True
+		
+		return False
+	
+
+	def knight_possible_move_check(self , piece_position , row_direction, col_direction , destination_space):
+		if (piece_position[0] - row_direction == destination_space[0] and piece_position[1] - col_direction ==  destination_space[1]):
+			return True
+		elif (piece_position[0] - col_direction == destination_space[0] and piece_position[1] - row_direction == destination_space[1]):
+			return True
+		else:
+			return False
 
 
 

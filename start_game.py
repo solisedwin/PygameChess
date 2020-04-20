@@ -39,14 +39,12 @@ class RunGame(object):
 						elif game_play.validate_piece_move(chess_piece_sprite):
 							
 							screen.fill( (106, 168, 176))
-
 							screen.blit(chess_board_image , (90,150) )
-
 							new_empty_space = game_play.move_piece(chess_piece_sprite)
 
 							#new_empty_space.draw_green_border(screen)
-
 							screen.blit(new_empty_space.image ,  new_empty_space.rect )
+							game_play.current_player = game_play.player1 if game_play.current_player.name == "Black" else game_play.player2 
 
 						else:
 							continue
