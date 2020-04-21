@@ -44,7 +44,8 @@ class RunGame(object):
 
 							#new_empty_space.draw_green_border(screen)
 							screen.blit(new_empty_space.image ,  new_empty_space.rect )
-							game_play.current_player = game_play.player1 if game_play.current_player.name == "Black" else game_play.player2 
+							break
+							#game_play.current_player = game_play.player1 if game_play.current_player.name == "Black" else game_play.player2 
 
 						else:
 							continue

@@ -102,19 +102,11 @@ class Knight(ChessPiece):
 
 		direction_signs = [(-2,-1) , (1,-2) , (1,2) , (-1,2)]
 
-		for i in range(4):
-			
+		for i in range(4):			
 			row_direction, col_direction = direction_signs[i][0], direction_signs[i][1]
-			
-			format_str1 = ("Position: {} , {} ").format(direction_signs[i][0]  , direction_signs[i][1])
-			format_str2 = ("Position: {} , {} ").format(direction_signs[i][1]  , direction_signs[i][0])
 
-			print(format_str1)
-			print(format_str2)
-			
 			if self.knight_possible_move_check((piece_xpos , piece_ypos), row_direction , col_direction, destination_space):
 				return True
-		
 		return False
 	
 
@@ -135,10 +127,74 @@ class Bishop(ChessPiece):
 
 
 	def valid_moves(self, chess_board , destination_piece):
-
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]		
-		board_size = len(chess_board)
+
+		print('Piece xpos: ' + str(piece_xpos))
+		print('Destination xpos: ' + str(destination_xpos))
+
+
+		#------------ Upper moves for bishop -----------------
+
+		if destination_xpos < piece_xpos:
+
+			if destination_ypos < piece_ypos:
+				# -- Upper Left moves  
+				upper_left_decrement = 1
+				while True:
+					if piece_xpos - upper_left_decrement == destination_xpos and piece_ypos - upper_left_decrement == destination_ypos:
+						print('is true x')
+						return True
+					#Out of bounds on the left
+					if piece_xpos - upper_left_decrement == 0 or piece_ypos - upper_left_decrement  == 0:
+						break
+					upper_left_decrement += 1
+
+			else:
+				# -- Upper Right moves  
+				upper_right_increment = 1
+				while True:
+					#Out of bounds 
+					if piece_xpos - upper_right_increment == destination_xpos and piece_ypos + upper_right_increment == destination_ypos:
+						print('is true 2')
+						return True
+					if piece_xpos - upper_right_increment == 0  or piece_ypos + upper_right_increment == 7:
+						break
+					upper_right_increment += 1
+
+
+		#----------- Lower moves for bishop --------------
+		elif destination_xpos > piece_xpos:
+
+			if destination_ypos < piece_ypos:
+				# -- Lower Left moves  
+				lower_left_decrement = 1
+				while True:
+					#Out of bounds 
+					if piece_xpos + lower_left_decrement == destination_xpos and piece_ypos - lower_left_decrement == destination_ypos:
+						return True
+					if  piece_xpos + lower_left_decrement == 7	or piece_ypos - lower_left_decrement == 0:
+						break
+					lower_left_decrement += 1
+
+			else:
+				# -- Lower right moves
+				lower_right_counter = 1
+				while True:
+					if piece_xpos + lower_right_counter == destination_xpos and piece_ypos + lower_right_counter == destination_ypos:
+						return True
+					if piece_xpos + lower_right_counter	== 7 or piece_ypos + lower_right_counter == 7:
+						break
+					lower_right_counter += 1
+
+		else:
+			print('~~ Not a valid bishop move')
+
+
+		#Not valid bishop move
+		print('~~ Not valid bishop move')	
+		return False
+
 
 
 
@@ -168,12 +224,12 @@ class King(ChessPiece):
 
 		#Lower left
 		elif ( piece_xpos - 1 == destination_xpos and piece_ypos - 1 == destination_ypos ):
-			print('Valid King move diagonally. Upper left')
+			print('Valid King move diagonally. Lower left')
 			return True
 
 		 #Lower Right
 		elif ( piece_xpos + 1 == destination_xpos and piece_ypos + 1 == destination_ypos ):
-			print('Valid King move diagonally. Upper left')
+			print('Valid King move diagonally. Lower Right')
 			return True
 		else:
 			print('~~ Not a valid move for the king !!')
