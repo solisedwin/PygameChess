@@ -45,16 +45,18 @@ class Pawn(ChessPiece):
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]
 
+		pawn_move_counter = -1 if self.color == 'black' else 1
+
 	
 		#If its the first time we move a pawn, then we can move it once or twice. 
 		if self.moves == 0:
-			if piece_xpos - 1 == destination_xpos or piece_xpos - 2 == destination_xpos:
+			if piece_xpos - pawn_move_counter == destination_xpos or piece_xpos - (pawn_move_counter * 2) == destination_xpos:
 				#self.position = destination_space.rect
 				self.board_position = [destination_xpos , destination_ypos]
 				self.moves += 1
 				return True
 
-		elif piece_xpos - 1 == destination_xpos:
+		elif piece_xpos - pawn_move_counter == destination_xpos:
 			#self.position = destination_space.rect
 			self.board_position = [destination_xpos , destination_ypos]
 			return True
@@ -236,11 +238,89 @@ class Queen(ChessPiece):
 	def __init__(self , **kwargs):
 		super(Queen, self).__init__(**kwargs)
 
-
 	def valid_moves(self, chess_board, destination_piece):
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]
 		
+		#Queen moves are a combination of bishop and rook together. Just need one valid move from either or
+		if self.bishop_valid_moves(chess_board = chess_board , destination_piece = destination_piece) or self.rook_valid_moves(chess_board = chess_board, destination_piece = destination_piece):
+			return True
+		else:
+			return False
+
+
+	def bishop_valid_moves(self, chess_board , destination_piece):
+
+		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
+		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]		
+	
+		#------------ Upper moves for bishop -----------------
+		if destination_xpos < piece_xpos:
+
+			if destination_ypos < piece_ypos:
+				# -- Upper Left moves  
+				upper_left_decrement = 1
+				while True:
+					if piece_xpos - upper_left_decrement == destination_xpos and piece_ypos - upper_left_decrement == destination_ypos:
+						return True
+					#Out of bounds on the left
+					if piece_xpos - upper_left_decrement == 0 or piece_ypos - upper_left_decrement  == 0:
+						break
+					upper_left_decrement += 1
+
+			else:
+				# -- Upper Right moves  
+				upper_right_increment = 1
+				while True:
+					#Out of bounds 
+					if piece_xpos - upper_right_increment == destination_xpos and piece_ypos + upper_right_increment == destination_ypos:
+						return True
+					if piece_xpos - upper_right_increment == 0  or piece_ypos + upper_right_increment == 7:
+						break
+					upper_right_increment += 1
+
+
+		#----------- Lower moves for bishop --------------
+		elif destination_xpos > piece_xpos:
+
+			if destination_ypos < piece_ypos:
+				# -- Lower Left moves  
+				lower_left_decrement = 1
+				while True:
+					#Out of bounds 
+					if piece_xpos + lower_left_decrement == destination_xpos and piece_ypos - lower_left_decrement == destination_ypos:
+						return True
+					if  piece_xpos + lower_left_decrement == 7	or piece_ypos - lower_left_decrement == 0:
+						break
+					lower_left_decrement += 1
+
+			else:
+				# -- Lower right moves
+				lower_right_counter = 1
+				while True:
+					if piece_xpos + lower_right_counter == destination_xpos and piece_ypos + lower_right_counter == destination_ypos:
+						return True
+					if piece_xpos + lower_right_counter	== 7 or piece_ypos + lower_right_counter == 7:
+						break
+					lower_right_counter += 1
+
+		else:
+			return False
+		
+
+
+	def rook_valid_moves(self, chess_board , destination_piece):
+
+		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
+		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]
+
+		# Moving about the column  or row.
+		if piece_ypos  == destination_ypos or piece_xpos == destination_xpos:
+			return True
+		else:
+			return False
+
+
 
 class EmptySpace(pygame.sprite.Sprite):
 
