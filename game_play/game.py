@@ -16,28 +16,25 @@ class GamePlay(object):
 
 
 	def get_clicked_choosen_piece(self, screen , pos, chess_piece):
-
-		if not self.current_player.turn:
-			return None
-
+		
 		if not chess_piece.rect.collidepoint(pos):
 			return None
 
-		if isinstance(chess_piece , ChessPiece ) and self.current_player.piece_clicked is None:
+		has_intital_piece = self.current_player.piece_clicked is not None
+
+		if isinstance(chess_piece , ChessPiece) and chess_piece.color.strip() == self.current_player.color.strip():
 			chess_piece.draw_red_border(screen)
-			self.current_player.piece_clicked =  chess_piece
 			print('Clicked on piece: ' + str(chess_piece.name))
 			return chess_piece
 
 		#Second click to tell the player which piece to capture.
-		elif isinstance(chess_piece , ChessPiece) and self.current_player.piece_clicked is not None:
-			print('Clicked on 2nd piece to capture')
+		elif isinstance(chess_piece , ChessPiece) and chess_piece.color.strip() == self.current_player.color.strip():
+			print('Clicked on 2nd piece to capture. ' + chess_piece.name)
 			return chess_piece
 
 		#Second click to tell the player where to move the chess piece. Where its an empty space in this situation
-		elif isinstance(chess_piece , EmptySpace) and self.current_player.piece_clicked is not None:
-			print('Clicked on empty space to move piece !!!!')
-			return chess_piece
+		elif isinstance(chess_piece , EmptySpace) and has_intital_piece:
+			return True
 		else:
 			return None
 

@@ -143,7 +143,6 @@ class Bishop(ChessPiece):
 				upper_left_decrement = 1
 				while True:
 					if piece_xpos - upper_left_decrement == destination_xpos and piece_ypos - upper_left_decrement == destination_ypos:
-						print('is true x')
 						return True
 					#Out of bounds on the left
 					if piece_xpos - upper_left_decrement == 0 or piece_ypos - upper_left_decrement  == 0:
@@ -156,7 +155,6 @@ class Bishop(ChessPiece):
 				while True:
 					#Out of bounds 
 					if piece_xpos - upper_right_increment == destination_xpos and piece_ypos + upper_right_increment == destination_ypos:
-						print('is true 2')
 						return True
 					if piece_xpos - upper_right_increment == 0  or piece_ypos + upper_right_increment == 7:
 						break
@@ -189,12 +187,8 @@ class Bishop(ChessPiece):
 
 		else:
 			print('~~ Not a valid bishop move')
-
-
-		#Not valid bishop move
-		print('~~ Not valid bishop move')	
-		return False
-
+			return False
+		
 
 
 
@@ -243,6 +237,10 @@ class Queen(ChessPiece):
 		super(Queen, self).__init__(**kwargs)
 
 
+	def valid_moves(self, chess_board, destination_piece):
+		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
+		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]
+		
 
 class EmptySpace(pygame.sprite.Sprite):
 
