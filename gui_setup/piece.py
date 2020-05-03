@@ -5,12 +5,10 @@ import os
 current_folder = os.path.dirname(__file__)
 image_folder = os.path.join(current_folder, "../images")
 
-
 class ChessPiece(pygame.sprite.Sprite):
 	"""docstring for ChessPiece"""
-	def __init__(self, name = None, color = None, position = None, is_taken = False, 
-		image = None , board_position = None):
-		
+	def __init__(self,name = None,color = None,position = None,is_taken = False, 
+		image = None,board_position = None):
 		super().__init__()
 		
 		self.image_title = image
@@ -27,7 +25,6 @@ class ChessPiece(pygame.sprite.Sprite):
 		
 		self.board_position = board_position
 		
-		
 	def draw_red_border(self, screen):
 		RED = (255, 0, 0)
 		pygame.draw.rect(screen, RED, self.rect, 2)	
@@ -40,7 +37,7 @@ class Pawn(ChessPiece):
 		self.moves = 0
 
 
-	def valid_moves(self, chess_board,  destination_piece):
+	def valid_moves(self,chess_board,destination_piece):
 
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]
@@ -64,21 +61,20 @@ class Rook(ChessPiece):
 	def __init__(self , **kwargs):
 		super(Rook, self).__init__(**kwargs) 
 	
-	def valid_moves(self, chess_board , destination_piece):
+	def valid_moves(self,chess_board,destination_piece):
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]
 
 		# Moving about the column  or row.
 		if piece_ypos  == destination_ypos or piece_xpos == destination_xpos:	
 			print('Valid move for Rook')
-			return self.doesnt_collide_with_pieces(chess_board, piece_pos = (piece_xpos, piece_ypos),  destination_pos = (destination_xpos, destination_ypos) )
+			return self.doesnt_collide_with_pieces(chess_board,piece_pos=(piece_xpos, piece_ypos),destination_pos = (destination_xpos, destination_ypos) )
 		else:
 			print('Not a valid move for the Rook !')
 			return False
 
 
-	def doesnt_collide_with_pieces(self, chess_board, piece_pos,  destination_pos):
-
+	def doesnt_collide_with_pieces(self,chess_board,piece_pos,destination_pos):
 		piece_xpos = piece_pos[0]
 		piece_ypos = piece_pos[1]
 
@@ -104,14 +100,12 @@ class Rook(ChessPiece):
 					return False
 			return True
 
-
-
 class Knight(ChessPiece):
 	"""docstring for Knight"""
 	def __init__(self , **kwargs):
 		super(Knight, self).__init__(**kwargs)
 		
-	def valid_moves(self, chess_board , destination_piece):
+	def valid_moves(self,chess_board,destination_piece):
 
 		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_space = (destination_piece.board_position[0] , destination_piece.board_position[1])
@@ -123,13 +117,11 @@ class Knight(ChessPiece):
 
 		for i in range(4):			
 			row_direction, col_direction = direction_signs[i][0], direction_signs[i][1]
-
 			if self.knight_possible_move_check((piece_xpos , piece_ypos), row_direction , col_direction, destination_space):
 				return True
 		return False
-	
 
-	def knight_possible_move_check(self , piece_position , row_direction, col_direction , destination_space):
+	def knight_possible_move_check(self,piece_position,row_direction,col_direction, destination_space):
 		if (piece_position[0] - row_direction == destination_space[0] and piece_position[1] - col_direction ==  destination_space[1]):
 			return True
 		elif (piece_position[0] - col_direction == destination_space[0] and piece_position[1] - row_direction == destination_space[1]):
@@ -143,75 +135,58 @@ class Bishop(ChessPiece):
 	def __init__(self , **kwargs):
 		super(Bishop, self).__init__(**kwargs)
 
-
-	def valid_moves(self, chess_board , destination_piece):
-		piece_xpos , piece_ypos = self.board_position[0] ,self.board_position[1]
+	def valid_moves(self, chess_board,destination_piece):
+		piece_xpos,piece_ypos = self.board_position[0] ,self.board_position[1]
 		destination_xpos , destination_ypos = destination_piece.board_position[0] , destination_piece.board_position[1]		
-
-		print('Piece xpos: ' + str(piece_xpos))
-		print('Destination xpos: ' + str(destination_xpos))
-
+		
 		#------------ Upper moves for bishop -----------------
 		if destination_xpos < piece_xpos:
-
 			if destination_ypos < piece_ypos:
 				# -- Upper Left moves  
-				upper_left_decrement = -1
+				upper_left_counter = 1
 				while True:
-
-					piece_xpos += upper_left_decrement
-					piece_ypos += upper_left_decrement
-
-					if not self.doesnt_collide_with_pieces(chess_board = chess_board , xpos = piece_xpos, ypos = piece_ypos):
+					piece_xpos -= upper_left_counter
+					piece_ypos -= upper_left_counter
+					if not self.doesnt_collide_with_pieces(chess_board = chess_board,xpos = piece_xpos, ypos = piece_ypos):
 						return False
-
-					if piece_xpos == destination_xpos and piece_ypos == destination_ypos:
+					if (piece_xpos,piece_ypos) == (destination_xpos,destination_ypos):
 						return True
 					#Out of bounds on the left
 					if piece_xpos == 0 or piece_ypos == 0:
 						break
-					upper_left_decrement -= 1
-
+					#upper_left_counter += 1
 			else:
 				# -- Upper Right moves  
-				upper_right_increment = 1
+				upper_right_counter = 1
 				while True:
-
-					piece_xpos -= upper_right_increment
-					piece_ypos += upper_right_increment
-
-					if not self.doesnt_collide_with_pieces(chess_board , xpos = piece_xpos, ypos = piece_xpos):
+					piece_xpos -= upper_right_counter
+					piece_ypos += upper_right_counter
+					if not self.doesnt_collide_with_pieces(chess_board,xpos = piece_xpos,ypos = piece_ypos):
 						return False
-
-					if piece_xpos == destination_xpos and piece_ypos == destination_ypos:
+					if (piece_xpos,piece_ypos) == (destination_xpos,destination_ypos):
 						return True
 					#Out of bounds 
 					if piece_xpos == 0  or piece_ypos == 7:
 						break
-					upper_right_increment += 1
+					#upper_right_counter += 1
 
 
 		#----------- Lower moves for bishop --------------
 		elif destination_xpos > piece_xpos:
-
 			if destination_ypos < piece_ypos:
 				# -- Lower Left moves  
-				lower_left_decrement = 1
+				lower_left_counter = 1
 				while True:
-
-					piece_xpos += lower_left_decrement
-					piece_ypos -= lower_left_decrement
+					piece_xpos += lower_left_counter
+					piece_ypos -= lower_left_counter
 					if not self.doesnt_collide_with_pieces(chess_board = chess_board, xpos = piece_xpos, ypos = piece_ypos):
 						return False
-
-					if piece_xpos  == destination_xpos and piece_ypos == destination_ypos:
+					if (piece_xpos,piece_ypos) == (destination_xpos,destination_ypos):
 						return True
-				
 					#Out of bounds 
-					if piece_xpos + lower_left_decrement == 7	or piece_ypos - lower_left_decrement == 0:
+					if piece_xpos + lower_left_counter == 7	or piece_ypos - lower_left_counter == 0:
 						break
-					lower_left_decrement += 1
-
+					#lower_left_counter += 1
 			else:
 				# -- Lower right moves
 				lower_right_counter = 1
@@ -220,19 +195,20 @@ class Bishop(ChessPiece):
 					piece_ypos += lower_right_counter
 					if not self.doesnt_collide_with_pieces(chess_board = chess_board, xpos = piece_xpos, ypos = piece_ypos):
 						return False
-					if piece_xpos == destination_xpos and piece_ypos == destination_ypos:
+					if (piece_xpos,piece_ypos) == (destination_xpos,destination_ypos):
 						return True
 					if piece_xpos == 7 or piece_ypos == 7:
 						break
-					lower_right_counter += 1
+					#lower_right_counter += 1
 		else:
 			print('~~ Not a valid bishop move')
 			return False
 		
 
 	def doesnt_collide_with_pieces(self, chess_board, xpos , ypos):
+		print('Tracing ({} , {})'.format(xpos, ypos))
 		if isinstance(chess_board[xpos][ypos], ChessPiece):
-			print('!! Bishop collides with pieces in the way !!')
+			print('!! Bishop collides {} {} !!'.format(chess_board[xpos][ypos].color, chess_board[xpos][ypos].name)) 
 			return False
 		else:
 			return True
@@ -309,25 +285,25 @@ class Queen(ChessPiece):
 
 			if destination_ypos < piece_ypos:
 				# -- Upper Left moves  
-				upper_left_decrement = 1
+				upper_left_counter = 1
 				while True:
-					if piece_xpos - upper_left_decrement == destination_xpos and piece_ypos - upper_left_decrement == destination_ypos:
+					if piece_xpos - upper_left_counter == destination_xpos and piece_ypos - upper_left_counter == destination_ypos:
 						return True
 					#Out of bounds on the left
-					if piece_xpos - upper_left_decrement == 0 or piece_ypos - upper_left_decrement  == 0:
+					if piece_xpos - upper_left_counter == 0 or piece_ypos - upper_left_counter  == 0:
 						break
-					upper_left_decrement += 1
+					upper_left_counter += 1
 
 			else:
 				# -- Upper Right moves  
-				upper_right_increment = 1
+				upper_right_counter = 1
 				while True:
 					#Out of bounds 
-					if piece_xpos - upper_right_increment == destination_xpos and piece_ypos + upper_right_increment == destination_ypos:
+					if piece_xpos - upper_right_counter == destination_xpos and piece_ypos + upper_right_counter == destination_ypos:
 						return True
-					if piece_xpos - upper_right_increment == 0  or piece_ypos + upper_right_increment == 7:
+					if piece_xpos - upper_right_counter == 0  or piece_ypos + upper_right_counter == 7:
 						break
-					upper_right_increment += 1
+					upper_right_counter += 1
 
 
 		#----------- Lower moves for bishop --------------
@@ -335,14 +311,14 @@ class Queen(ChessPiece):
 
 			if destination_ypos < piece_ypos:
 				# -- Lower Left moves  
-				lower_left_decrement = 1
+				lower_left_counter = 1
 				while True:
 					#Out of bounds 
-					if piece_xpos + lower_left_decrement == destination_xpos and piece_ypos - lower_left_decrement == destination_ypos:
+					if piece_xpos + lower_left_counter == destination_xpos and piece_ypos - lower_left_counter == destination_ypos:
 						return True
-					if  piece_xpos + lower_left_decrement == 7	or piece_ypos - lower_left_decrement == 0:
+					if  piece_xpos + lower_left_counter == 7	or piece_ypos - lower_left_counter == 0:
 						break
-					lower_left_decrement += 1
+					lower_left_counter += 1
 
 			else:
 				# -- Lower right moves

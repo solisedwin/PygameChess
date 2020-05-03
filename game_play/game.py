@@ -13,8 +13,6 @@ class GamePlay(object):
 		self.player2 = player2
 		self.current_player = player1
 
-
-
 	def get_clicked_choosen_piece(self, screen , pos, chess_piece):
 		
 		if not chess_piece.rect.collidepoint(pos):
@@ -67,11 +65,6 @@ class GamePlay(object):
 		#Add empty space from location where piece was moved. x,y corrdinate
 		self.chess_board[original_x][original_y] = new_empty_space
 		self.chess_board[destination_space.board_position[0]][destination_space.board_position[1]] = moveable_piece
-		#----- Log -------
-		for row in range(0, 8):
-			for col in range(0,8):
-				print(self.chess_board[row][col].name + ' ', end='')
-			print()
 		return new_empty_space
 
 
