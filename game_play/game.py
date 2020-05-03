@@ -8,11 +8,11 @@ class GamePlay(object):
 	def __init__(self, chess_board = None , chess_sprites = None , player1 = None, player2 = None):
 		self.chess_board = chess_board
 		self.chess_sprites = chess_sprites
-
 		# Player Objects
 		self.player1 = player1
 		self.player2 = player2
 		self.current_player = player1
+
 
 
 	def get_clicked_choosen_piece(self, screen , pos, chess_piece):
@@ -41,14 +41,15 @@ class GamePlay(object):
 
 	def validate_piece_move(self, chess_destination_piece):
 
-		destination_xpos , destination_ypos = chess_destination_piece.board_position[0] , chess_destination_piece.board_position[1]
-		# Check if player wants to move to a spot where its either empty or another opposing piece is occupied
+		current_piece = self.current_player.piece_clicked
 
 		#Wants to move to an empty spot. Check moves of moveable piece
 		if chess_destination_piece.name == 'Empty':
-			is_valid_move = self.current_player.piece_clicked.valid_moves( chess_board = self.chess_board , destination_piece = chess_destination_piece	)
+			is_valid_move = current_piece.valid_moves(chess_board = self.chess_board , destination_piece = chess_destination_piece)
 			return is_valid_move
-			
+		else:
+			pass
+
 
 	def move_piece(self, destination_space):
 		moveable_piece = self.current_player.piece_clicked
@@ -56,16 +57,21 @@ class GamePlay(object):
 		#Save information somewhere for our new empty space sprite
 		original_rect = moveable_piece.rect
 		original_board_position = moveable_piece.board_position
-		original_x , original_y = moveable_piece.board_position[0] , moveable_piece.board_position[1]
+		original_x,original_y = moveable_piece.board_position[0] , moveable_piece.board_position[1]
 
 		moveable_piece.rect = destination_space.rect
 		moveable_piece.board_position = destination_space.board_position		
 		
-		new_empty_space = self.deep_copy_space_sprite(destination_space, surface_pos = original_rect , board_position =  original_board_position )
-
+		new_empty_space = self.deep_copy_space_sprite(destination_space,surface_pos = original_rect,board_position = original_board_position)
+	
 		#Add empty space from location where piece was moved. x,y corrdinate
 		self.chess_board[original_x][original_y] = new_empty_space
 		self.chess_board[destination_space.board_position[0]][destination_space.board_position[1]] = moveable_piece
+		#----- Log -------
+		for row in range(0, 8):
+			for col in range(0,8):
+				print(self.chess_board[row][col].name + ' ', end='')
+			print()
 		return new_empty_space
 
 
