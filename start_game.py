@@ -76,7 +76,7 @@ class RunGame(object):
 		
 		game_play = GamePlay(chess_board = chess_board, chess_sprites = all_sprites, player1 = white_player,player2 = black_player)
 		chess_board_image = chess_settings.get_main_board_image()
-		screen.blit(chess_board_image,(90,150) )
+		screen.blit(chess_board_image,(90,150))
 
 		while True:
 			clock.tick(30)
@@ -85,7 +85,6 @@ class RunGame(object):
 			# *after* drawing everything
 			game_play.chess_sprites.draw(screen)
 			pygame.display.update()
-
 		pygame.display.quit()
 
 
