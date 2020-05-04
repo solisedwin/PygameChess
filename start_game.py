@@ -5,7 +5,6 @@ from gui_setup.setup import ChessSetup
 from pygame.time import Clock
 from game_play.player import Player
 from game_play.game import GamePlay
-	
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -14,7 +13,6 @@ class RunGame(object):
 
 	def __init__(self):
 		pygame.init()
-
 
 	def handle_events(self, sprites, screen, game_play, chess_board_image):
 
@@ -56,7 +54,6 @@ class RunGame(object):
 
 
 	def main(self):
-
 		chess_settings = ChessSetup()
 		screen = chess_settings.set_window()
 
