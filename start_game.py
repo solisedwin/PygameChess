@@ -1,4 +1,3 @@
-import copy
 import sys
 import pygame
 from gui_setup.setup import ChessSetup
@@ -37,11 +36,11 @@ class RunGame(object):
 						#Second time player clicked to tell the piece where to move
 						elif game_play.validate_piece_move(chess_piece_sprite):
 							screen.fill( (106, 168, 176))
-							screen.blit(chess_board_image , (90,150) )
+							screen.blit(chess_board_image, (90,150))
 							new_empty_space = game_play.move_piece(chess_piece_sprite)
 
 							#new_empty_space.draw_green_border(screen)
-							screen.blit(new_empty_space.image,new_empty_space.rect )
+							screen.blit(new_empty_space.image,new_empty_space.rect)
 							game_play.current_player.piece_clicked = None
 							
 							#Swap player turn
